@@ -5,9 +5,9 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Repositories", "App.Repositories\App.Repositories.csproj", "{325AB67C-6973-4748-9425-C9A0AB1CC301}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Servicesa", "App.Servicesa\App.Servicesa.csproj", "{8690CA3E-D2BE-4A0A-9DAF-7440EB4AE161}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Services", "App.Services\App.Services.csproj", "{8690CA3E-D2BE-4A0A-9DAF-7440EB4AE161}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Api", "App.Api\App.Api.csproj", "{853A0E13-C355-47E8-938F-7FAE591F3972}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Api", "App.Api\App.Api.csproj", "{C6BA7084-B8B2-4C27-9C7D-857389DFEDE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,9 +26,9 @@ Global
 		{8690CA3E-D2BE-4A0A-9DAF-7440EB4AE161}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8690CA3E-D2BE-4A0A-9DAF-7440EB4AE161}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8690CA3E-D2BE-4A0A-9DAF-7440EB4AE161}.Release|Any CPU.Build.0 = Release|Any CPU
-		{853A0E13-C355-47E8-938F-7FAE591F3972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{853A0E13-C355-47E8-938F-7FAE591F3972}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{853A0E13-C355-47E8-938F-7FAE591F3972}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{853A0E13-C355-47E8-938F-7FAE591F3972}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6BA7084-B8B2-4C27-9C7D-857389DFEDE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6BA7084-B8B2-4C27-9C7D-857389DFEDE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6BA7084-B8B2-4C27-9C7D-857389DFEDE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6BA7084-B8B2-4C27-9C7D-857389DFEDE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
