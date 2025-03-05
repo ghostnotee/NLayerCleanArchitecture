@@ -16,9 +16,9 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
     public async Task<ServiceResult<ProductDto>> GetProductByIdAsync(int id)
     {
         var product = await productRepository.GetByIdAsync(id);
-        if (product is null) ServiceResult<ProductDto>.Failure($"Product with id: {id} was not found");
+        if (product is null) ServiceResult<ProductDto>.Failure($"Product with id: {id} was not found", HttpStatusCode.NotFound);
         var productAsDto = new ProductDto(product!.Id, product.Name, product.Price, product.Stock);
-        return ServiceResult<ProductDto>.Success(productAsDto!);
+        return ServiceResult<ProductDto>.Success(productAsDto);
     }
 
     public async Task<ServiceResult<CreateProductResponse>> CreateProductAsync(CreateProductRequest request)
