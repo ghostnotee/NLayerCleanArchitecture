@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Repositories.Products;
 
@@ -6,6 +7,13 @@ namespace Services.Products;
 
 public class ProductService(IProductRepository productRepository, IUnitOfWork unitOfWork) : IProductService
 {
+    public async Task<ServiceResult<List<ProductDto>>> GetAllProducts()
+    {
+        var products = await productRepository.GetAll().ToListAsync();
+        var productsAsDto = products.Select(x => new ProductDto(x.Id, x.Name, x.Price, x.Stock)).ToList();
+        return ServiceResult<List<ProductDto>>.Success(productsAsDto);
+    }
+    
     public async Task<ServiceResult<List<ProductDto>>> GetTopPriceProductsAsync(int count)
     {
         var products = await productRepository.GetTopPriceProductsAsync(count);
