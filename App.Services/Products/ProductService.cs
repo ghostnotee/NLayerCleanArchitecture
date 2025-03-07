@@ -13,7 +13,7 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
         var productsAsDto = products.Select(x => new ProductDto(x.Id, x.Name, x.Price, x.Stock)).ToList();
         return ServiceResult<List<ProductDto>>.Success(productsAsDto);
     }
-    
+
     public async Task<ServiceResult<List<ProductDto>>> GetPagedAsync(int pageNumber, int pageSize)
     {
         var products = await productRepository.GetAll().Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
@@ -46,7 +46,7 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
         };
         await productRepository.AddAsync(product);
         await unitOfWork.SaveChangesAsync();
-        return ServiceResult<CreateProductResponse>.Success(new CreateProductResponse(product.Id), HttpStatusCode.Created);
+        return ServiceResult<CreateProductResponse>.SuccessAsCreated(new CreateProductResponse(product.Id), $"/api/products/{product.Id}");
     }
 
     public async Task<ServiceResult> UpdateAsync(int id, UpdateProductRequest request)
