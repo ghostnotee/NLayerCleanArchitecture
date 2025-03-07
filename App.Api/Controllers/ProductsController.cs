@@ -19,4 +19,4 @@ public class ProductsController(IProductService productService) : CustomBaseCont
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id) => CreateActionResult(await productService.DeleteAsync(id));
-}
+} 

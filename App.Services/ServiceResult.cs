@@ -5,11 +5,7 @@ namespace Services;
 
 public class ServiceResult<T>
 {
-    public ServiceResult()
-    {
-    }
-
-    public T? Data { get; set; }
+    public T? Data { get; set; }    
     public List<string>? ErrorMessages { get; set; } = new();
 
     [JsonIgnore] public bool IsSuccess => ErrorMessages == null || ErrorMessages.Count == 0;
