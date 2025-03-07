@@ -30,6 +30,8 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
+app.UseExceptionHandler(applicationBuilder => {});
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

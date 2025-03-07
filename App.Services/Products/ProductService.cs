@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Repositories.Products;
+using Services.ExceptionHandler;
 using Services.Products.Create;
 using Services.Products.Update;
 
@@ -12,6 +13,7 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
 {
     public async Task<ServiceResult<List<ProductDto>>> GetAllAsync()
     {
+        throw new CriticalException("Kritik hata oluştu");
         var products = await productRepository.GetAll().ToListAsync();
         var productsAsDto = mapper.Map<List<ProductDto>>(products);
         return ServiceResult<List<ProductDto>>.Success(productsAsDto);
