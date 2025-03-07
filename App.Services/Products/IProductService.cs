@@ -1,3 +1,6 @@
+using Services.Products.Create;
+using Services.Products.Update;
+
 namespace Services.Products;
 
 public interface IProductService

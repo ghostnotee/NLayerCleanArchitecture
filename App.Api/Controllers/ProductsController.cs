@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services.Products;
+using Services.Products.Create;
+using Services.Products.Update;
 
 namespace App.Api.Controllers;
 

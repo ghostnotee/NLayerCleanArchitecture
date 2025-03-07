@@ -1,38 +1,41 @@
 using System.Net;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Repositories.Products;
+using Services.Products.Create;
+using Services.Products.Update;
 
 namespace Services.Products;
 
-public class ProductService(IProductRepository productRepository, IUnitOfWork unitOfWork) : IProductService
+public class ProductService(IProductRepository productRepository, IUnitOfWork unitOfWork, IMapper mapper) : IProductService
 {
     public async Task<ServiceResult<List<ProductDto>>> GetAllAsync()
     {
         var products = await productRepository.GetAll().ToListAsync();
-        var productsAsDto = products.Select(x => new ProductDto(x.Id, x.Name, x.Price, x.Stock)).ToList();
+        var productsAsDto = mapper.Map<List<ProductDto>>(products);
         return ServiceResult<List<ProductDto>>.Success(productsAsDto);
     }
 
     public async Task<ServiceResult<List<ProductDto>>> GetPagedAsync(int pageNumber, int pageSize)
     {
         var products = await productRepository.GetAll().Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
-        var productsAsDto = products.Select(x => new ProductDto(x.Id, x.Name, x.Price, x.Stock)).ToList();
+        var productsAsDto = mapper.Map<List<ProductDto>>(products);
         return ServiceResult<List<ProductDto>>.Success(productsAsDto);
     }
 
     public async Task<ServiceResult<List<ProductDto>>> GetTopPriceProductsAsync(int count)
     {
         var products = await productRepository.GetTopPriceProductsAsync(count);
-        var productsAsDto = products.Select(x => new ProductDto(x.Id, x.Name, x.Price, x.Stock)).ToList();
+        var productsAsDto = mapper.Map<List<ProductDto>>(products);
         return ServiceResult<List<ProductDto>>.Success(productsAsDto);
     }
 
     public async Task<ServiceResult<ProductDto?>> GetByIdAsync(int id)
     {
         var product = await productRepository.GetByIdAsync(id);
-        if (product is null) ServiceResult<ProductDto>.Failure($"Product with id: {id} was not found", HttpStatusCode.NotFound);
-        var productAsDto = new ProductDto(product!.Id, product.Name, product.Price, product.Stock);
+        if (product is null) return ServiceResult<ProductDto>.Failure($"Product with id: {id} was not found", HttpStatusCode.NotFound)!;
+        var productAsDto = mapper.Map<ProductDto>(product);
         return ServiceResult<ProductDto>.Success(productAsDto)!;
     }
 
