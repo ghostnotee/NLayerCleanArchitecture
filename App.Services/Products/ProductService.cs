@@ -38,6 +38,8 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
 
     public async Task<ServiceResult<CreateProductResponse>> CreateAsync(CreateProductRequest request)
     {
+        var existingProductName = await productRepository.Where(x => x.Name == request.Name).AnyAsync();
+        if (existingProductName) return ServiceResult<CreateProductResponse>.Failure("Ürün ismi veritabanında mevcut.");
         var product = new Product
         {
             Name = request.Name,
@@ -60,10 +62,10 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
         await unitOfWork.SaveChangesAsync();
         return ServiceResult.Success(HttpStatusCode.NoContent);
     }
-    
+
     public async Task<ServiceResult> UpdateStockAsync(UpdateProductStockRequest request)
     {
-        var product = await productRepository.GetByIdAsync(request.ProductId); 
+        var product = await productRepository.GetByIdAsync(request.ProductId);
         if (product is null) return ServiceResult.Failure($"Product with id: {request.ProductId} was not found");
         product.Stock = request.Quantity;
         productRepository.Update(product);

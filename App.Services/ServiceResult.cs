@@ -14,7 +14,7 @@ public class ServiceResult<T>
 
     [JsonIgnore] public HttpStatusCode StatusCode { get; set; }
 
-    public string? UrlAsCreated { get; set; }
+    [JsonIgnore] public string? UrlAsCreated { get; set; }
 
     public static ServiceResult<T> Success(T data, HttpStatusCode statusCode = HttpStatusCode.OK)
     {
