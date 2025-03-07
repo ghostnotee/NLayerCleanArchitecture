@@ -1,5 +1,6 @@
 using Services.Products.Create;
 using Services.Products.Update;
+using Services.Products.UpdateStock;
 
 namespace Services.Products;
 

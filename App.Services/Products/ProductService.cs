@@ -6,6 +6,7 @@ using Repositories.Products;
 using Services.ExceptionHandler;
 using Services.Products.Create;
 using Services.Products.Update;
+using Services.Products.UpdateStock;
 
 namespace Services.Products;
 
@@ -13,7 +14,7 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
 {
     public async Task<ServiceResult<List<ProductDto>>> GetAllAsync()
     {
-        throw new CriticalException("Kritik hata oluştu");
+        // throw new CriticalException("Kritik hata oluştu");
         var products = await productRepository.GetAll().ToListAsync();
         var productsAsDto = mapper.Map<List<ProductDto>>(products);
         return ServiceResult<List<ProductDto>>.Success(productsAsDto);
@@ -45,12 +46,7 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
     {
         var existingProductName = await productRepository.Where(x => x.Name == request.Name).AnyAsync();
         if (existingProductName) return ServiceResult<CreateProductResponse>.Failure("Ürün ismi veritabanında mevcut.");
-        var product = new Product
-        {
-            Name = request.Name,
-            Price = request.Price,
-            Stock = request.Stock
-        };
+        var product = mapper.Map<Product>(request);
         await productRepository.AddAsync(product);
         await unitOfWork.SaveChangesAsync();
         return ServiceResult<CreateProductResponse>.SuccessAsCreated(new CreateProductResponse(product.Id), $"/api/products/{product.Id}");
@@ -59,10 +55,10 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
     public async Task<ServiceResult> UpdateAsync(int id, UpdateProductRequest request)
     {
         var product = await productRepository.GetByIdAsync(id);
-        if (product is null) return ServiceResult.Failure($"Product with id: {id} was not found");
-        product.Name = request.Name;
-        product.Price = request.Price;
-        product.Stock = request.Stock;
+        if (product is null) return ServiceResult.Failure($"Product with id: {id} was not found", HttpStatusCode.NotFound);
+        var existingProductName = await productRepository.Where(x => x.Name == request.Name && x.Id != id).AnyAsync();
+        if (existingProductName) return ServiceResult.Failure("Ürün ismi veritabanında mevcut.");
+        product = mapper.Map(request, product);
         productRepository.Update(product);
         await unitOfWork.SaveChangesAsync();
         return ServiceResult.Success(HttpStatusCode.NoContent);
