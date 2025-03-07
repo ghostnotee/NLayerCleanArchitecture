@@ -60,6 +60,16 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
         await unitOfWork.SaveChangesAsync();
         return ServiceResult.Success(HttpStatusCode.NoContent);
     }
+    
+    public async Task<ServiceResult> UpdateStockAsync(UpdateProductStockRequest request)
+    {
+        var product = await productRepository.GetByIdAsync(request.ProductId); 
+        if (product is null) return ServiceResult.Failure($"Product with id: {request.ProductId} was not found");
+        product.Stock = request.Quantity;
+        productRepository.Update(product);
+        await unitOfWork.SaveChangesAsync();
+        return ServiceResult.Success(HttpStatusCode.NoContent);
+    }
 
     public async Task<ServiceResult> DeleteAsync(int id)
     {
