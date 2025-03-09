@@ -2,9 +2,11 @@ using Repositories.Products;
 
 namespace Repositories.Categories;
 
-public class Category
+public class Category : IAuditEntity
 {
     public int Id { get; set; }
     public required string Name { get; set; }
     public List<Product>? Products { get; set; }
+    public DateTime Created { get; set; }
+    public DateTime? Updated { get; set; }
 }
