@@ -8,5 +8,6 @@ public class UpdateProductRequestValidator : AbstractValidator<UpdateProductRequ
     {
         RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
         RuleFor(x => x.Price).NotEmpty().GreaterThan(0);
+        RuleFor(x=>x.CategoryId).GreaterThan(0).WithMessage("Kategori Id belirtilmelidir.");
     }
 }
