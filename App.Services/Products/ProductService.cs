@@ -3,7 +3,6 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Repositories.Products;
-using Services.ExceptionHandler;
 using Services.Products.Create;
 using Services.Products.Update;
 using Services.Products.UpdateStock;
