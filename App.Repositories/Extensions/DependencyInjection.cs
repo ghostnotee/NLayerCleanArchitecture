@@ -19,7 +19,7 @@ public static class DependencyInjection
             builder.AddInterceptors(new AuditDbContextInterceptor());
         });
 
-        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();

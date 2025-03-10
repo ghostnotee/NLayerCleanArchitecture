@@ -3,21 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repositories;
 
-public class GenericRepository<T>(AppDbContext context) : IGenericRepository<T> where T : class
+public class GenericRepository<TEntity, TId>(AppDbContext context)
+    : IGenericRepository<TEntity, TId> where TEntity : BaseEntity<TId> where TId : struct
 {
+    private readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
     protected readonly AppDbContext Context = context;
-    
-    private readonly DbSet<T> _dbSet = context.Set<T>();
 
-    public IQueryable<T> GetAll() => _dbSet.AsQueryable().AsNoTracking();
-
-    public IQueryable<T> Where(Expression<Func<T, bool>> predicate) => _dbSet.Where(predicate).AsNoTracking();
-
-    public ValueTask<T?> GetByIdAsync(int id) => _dbSet.FindAsync(id);
-
-    public async ValueTask AddAsync(T entity) => await _dbSet.AddAsync(entity);
-
-    public void Update(T entity) => _dbSet.Update(entity);
-
-    public void Delete(T entity) => _dbSet.Remove(entity);
+    public IQueryable<TEntity> GetAll() => _dbSet.AsQueryable().AsNoTracking();
+    public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate) => _dbSet.Where(predicate).AsNoTracking();
+    public async ValueTask<bool> AnyAsync(TId id) => await _dbSet.AnyAsync(x => x.Id.Equals(id));
+    public ValueTask<TEntity?> GetByIdAsync(int id) => _dbSet.FindAsync(id);
+    public async ValueTask AddAsync(TEntity entity) => await _dbSet.AddAsync(entity);
+    public void Update(TEntity entity) => _dbSet.Update(entity);
+    public void Delete(TEntity entity) => _dbSet.Remove(entity);
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Categories;
 using Services.ExceptionHandler;
+using Services.Filters;
 using Services.Products;
 
 namespace Services.Extensions;
@@ -15,6 +16,7 @@ public static class DependencyInjection
     {
         // .Net ProblemDetails suppresses ModelStateInvalidFilter.
         services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+        services.AddScoped(typeof(NotFoundFilter<,>));
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddFluentValidationAutoValidation();

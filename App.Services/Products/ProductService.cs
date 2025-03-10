@@ -75,9 +75,7 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
 
     public async Task<ServiceResult> DeleteAsync(int id)
     {
-        var product = await productRepository.GetByIdAsync(id);
-        if (product is null) return ServiceResult.Failure($"Product with id: {id} was not found", HttpStatusCode.NotFound);
-        productRepository.Delete(product);
+        productRepository.Delete((await productRepository.GetByIdAsync(id))!);
         await unitOfWork.SaveChangesAsync();
         return ServiceResult.Success(HttpStatusCode.NoContent);
     }
