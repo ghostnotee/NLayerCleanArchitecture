@@ -3,6 +3,7 @@ using App.Api.Extensions;
 using App.Api.Filters;
 using App.Application.Contracts.Caching;
 using App.Application.Extensions;
+using App.Bus;
 using App.Caching;
 using App.Persistence.Extensions;
 
@@ -15,6 +16,7 @@ builder.Services.AddRepositories(builder.Configuration).AddServices();
 builder.Services.AddScoped(typeof(NotFoundFilter<,>));
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddBusExtension(builder.Configuration);
 
 var app = builder.Build();
 

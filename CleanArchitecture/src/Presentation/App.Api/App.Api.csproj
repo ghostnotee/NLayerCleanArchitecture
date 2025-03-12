@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\..\App.Bus\App.Bus.csproj" />
       <ProjectReference Include="..\..\Core\App.Application\App.Application.csproj" />
       <ProjectReference Include="..\..\Infrastructure\App.Caching\App.Caching.csproj" />
       <ProjectReference Include="..\..\Infrastructure\App.Persistence\App.Persistence.csproj" />
