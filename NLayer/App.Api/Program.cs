@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using Repositories.Extensions;
 using Scalar.AspNetCore;
 using Services;
@@ -27,7 +26,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.UseExceptionHandler(applicationBuilder => {});
+app.UseExceptionHandler(applicationBuilder => { });
 
 app.UseHttpsRedirection();
 

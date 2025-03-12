@@ -2,6 +2,7 @@ using App.Api.ExceptionHandlers;
 using App.Api.Filters;
 using App.Application.Extensions;
 using App.Persistence.Extensions;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,10 +22,15 @@ builder.Services.AddRepositories(builder.Configuration).AddServices();
 builder.Services.AddScoped(typeof(NotFoundFilter<,>));
 
 var app = builder.Build();
-app.UseExceptionHandler(applicationBuilder => {});
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) app.MapOpenApi();
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+
+app.UseExceptionHandler(applicationBuilder => { });
 
 app.UseHttpsRedirection();
 
