@@ -14,6 +14,7 @@ public class GenericRepository<TEntity, TId>(AppDbContext context)
     public async Task<List<TEntity>> GetAllPagedAsync(int pageNumber, int pageSize) =>
         await _dbSet.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToListAsync();
     public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate) => _dbSet.Where(predicate).AsNoTracking();
+    public Task<bool> AnyAsync(TId id) => _dbSet.AnyAsync(x => x.Id.Equals(id));
     public async ValueTask<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate) => await _dbSet.AnyAsync(predicate);
     public ValueTask<TEntity?> GetByIdAsync(int id) => _dbSet.FindAsync(id);
     public async ValueTask AddAsync(TEntity entity) => await _dbSet.AddAsync(entity);

@@ -14,17 +14,11 @@ public static class DependencyInjection
     {
         // .Net ProblemDetails suppresses ModelStateInvalidFilter.
         services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
-        
-        
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        // TODO: Presentation'a taşınacak.
-        //services.AddScoped(typeof(NotFoundFilter<,>));
-        // services.AddExceptionHandler<CriticalExceptionHandler>();
-        // services.AddExceptionHandler<GlobalExceptionHandler>();
         return services;
     }
 }
