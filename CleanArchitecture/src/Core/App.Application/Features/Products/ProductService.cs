@@ -1,4 +1,5 @@
 using System.Net;
+using App.Application.Contracts.Caching;
 using App.Application.Contracts.Persistence;
 using App.Application.Features.Products.Create;
 using App.Application.Features.Products.Dto;
@@ -9,13 +10,24 @@ using AutoMapper;
 
 namespace App.Application.Features.Products;
 
-public class ProductService(IProductRepository productRepository, IUnitOfWork unitOfWork, IMapper mapper) : IProductService
+public class ProductService(IProductRepository productRepository, IUnitOfWork unitOfWork, IMapper mapper, ICacheService cacheService) : IProductService
 {
+    private const string AllProductsCacheKey = "AllProducts";
+    
     public async Task<ServiceResult<List<ProductDto>>> GetAllAsync()
     {
+        // cache aside design pattern
+        // 1. exist cache 2. from db. 3. caching data
+
+        var cachedProducts = await cacheService.GetAsync<List<ProductDto>>(AllProductsCacheKey);
+        if (cachedProducts is not null)
+            return ServiceResult<List<ProductDto>>.Success(cachedProducts);
+        
+        
         // throw new CriticalException("Kritik hata oluştu");
         var products = await productRepository.GetAllAsync();
         var productsAsDto = mapper.Map<List<ProductDto>>(products);
+        await cacheService.SetAsync(AllProductsCacheKey, productsAsDto, TimeSpan.FromMinutes(1));
         return ServiceResult<List<ProductDto>>.Success(productsAsDto);
     }
 
