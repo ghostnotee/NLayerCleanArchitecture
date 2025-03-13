@@ -1,19 +1,26 @@
 using System.Net;
 using App.Application.Contracts.Caching;
 using App.Application.Contracts.Persistence;
+using App.Application.Contracts.ServiceBus;
 using App.Application.Features.Products.Create;
 using App.Application.Features.Products.Dto;
 using App.Application.Features.Products.Update;
 using App.Application.Features.Products.UpdateStock;
 using App.Domain.Entities;
+using App.Domain.Events;
 using AutoMapper;
 
 namespace App.Application.Features.Products;
 
-public class ProductService(IProductRepository productRepository, IUnitOfWork unitOfWork, IMapper mapper, ICacheService cacheService) : IProductService
+public class ProductService(
+    IProductRepository productRepository,
+    IUnitOfWork unitOfWork,
+    IMapper mapper,
+    ICacheService cacheService,
+    IServiceBus busService) : IProductService
 {
     private const string AllProductsCacheKey = "AllProducts";
-    
+
     public async Task<ServiceResult<List<ProductDto>>> GetAllAsync()
     {
         // cache aside design pattern
@@ -22,8 +29,6 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
         var cachedProducts = await cacheService.GetAsync<List<ProductDto>>(AllProductsCacheKey);
         if (cachedProducts is not null)
             return ServiceResult<List<ProductDto>>.Success(cachedProducts);
-        
-        
         // throw new CriticalException("Kritik hata oluştu");
         var products = await productRepository.GetAllAsync();
         var productsAsDto = mapper.Map<List<ProductDto>>(products);
@@ -55,11 +60,12 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
 
     public async Task<ServiceResult<CreateProductResponse>> CreateAsync(CreateProductRequest request)
     {
-        var existingProductName = await productRepository.AnyAsync(x => x.Name == request.Name); 
+        var existingProductName = await productRepository.AnyAsync(x => x.Name == request.Name);
         if (existingProductName) return ServiceResult<CreateProductResponse>.Failure("Ürün ismi veritabanında mevcut.");
         var product = mapper.Map<Product>(request);
         await productRepository.AddAsync(product);
         await unitOfWork.SaveChangesAsync();
+        await busService.PublishAsync(new ProductAddedEvent(product.Id, product.Name, product.Price));
         return ServiceResult<CreateProductResponse>.SuccessAsCreated(new CreateProductResponse(product.Id), $"/api/products/{product.Id}");
     }
 
